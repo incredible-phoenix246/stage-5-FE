@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Instrument_Sans } from "next/font/google";
+import { Providers } from "./provider";
 import "./globals.scss";
 
 const font = Instrument_Sans({
@@ -22,7 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${font.className}`}>{children}</body>
+      <body className={`${font.className}`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

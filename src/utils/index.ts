@@ -12,3 +12,12 @@ export const generateNumericOTP = (length: number): string => {
   }
   return otp;
 };
+
+export function maskEmail(email: string): string {
+  const [localPart, domain] = email.split("@");
+  if (localPart.length <= 2) {
+    return `${localPart}***@${domain}`;
+  }
+  const maskedLocalPart = `${localPart.slice(0, 2)}***`;
+  return `${maskedLocalPart}@${domain}`;
+}
