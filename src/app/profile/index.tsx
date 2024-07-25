@@ -42,7 +42,7 @@ const ProfileHeader = () => {
   }`;
 
   return (
-    <header className="flex flex-col self-stretch px-6 pt-6 pb-20 w-full text-base font-semibold bg-violet-600 rounded-none max-md:px-5 max-md:max-w-full">
+    <header className="flex flex-col self-stretch px-6 pt-6 pb-20 w-full text-base font-semibold md:bg-violet-600 rounded-none max-md:px-5 max-md:max-w-full">
       <nav className="pl-[24px] p-[16px] w-full flex items-center justify-between bg-white md:rounded-xl">
         {user && (
           <Button asChild variant="secondary">
@@ -86,8 +86,7 @@ const PhoneScreen = () => {
   }, [user_id]);
   useEffect(() => {
     if (sesion) {
-      // @ts-ignore
-      setUser(sesion as User);
+      setUser(sesion.user as User);
       return;
     }
     startTranstion(() => {
@@ -98,7 +97,7 @@ const PhoneScreen = () => {
     });
   }, [sesion, user_id]);
   return (
-    <div className="bg-white w-[560px] h-[830px] hidden lg:flex items-center justify-center">
+    <div className="bg-white md:w-[560px] md:h-[830px] flex items-center justify-center">
       <div className="phone">
         <div className="phone-screen">
           <div className="top">
@@ -124,94 +123,102 @@ const PhoneScreen = () => {
                 </span>
               </div>
             </div>
-            <div className="flex items-center justify-center w-full flex-col gap-5">
-              {links.map((li) => (
-                <Link
-                  href={li.link}
-                  key={li.id}
-                  className={cn(
-                    "flex w-full h-[44px] rounded-md px-2 items-center justify-between",
-                    li.platform.toLowerCase() === "github"
-                      ? "bg-black text-white"
-                      : li.platform.toLowerCase() === "youtube"
-                      ? "bg-[#EE3939] text-white"
-                      : li.platform.toLowerCase() === "twitter"
-                      ? "bg-[#1DA1F2] text-white"
-                      : li.platform.toLowerCase() === "linkedin"
-                      ? "bg-[#2D68FF] text-white"
-                      : li.platform.toLowerCase() === "dribbble"
-                      ? "bg-[#ea4c89] text-white"
-                      : li.platform.toLowerCase() === "facebook"
-                      ? "bg-[#2442AC] text-white"
-                      : li.platform.toLowerCase() === "instagram"
-                      ? "bg-gradient-to-r from-pink-500 to-yellow-500 text-white"
-                      : li.platform.toLowerCase() === "gitlab"
-                      ? "bg-[#FC6D26] text-white"
-                      : li.platform.toLowerCase() === "frontend mentor"
-                      ? "bg-[#333333] text-white"
-                      : li.platform.toLowerCase() === "twitch"
-                      ? "bg-[#9146FF] text-white"
-                      : li.platform.toLowerCase() === "dev.to"
-                      ? "bg-[#0A0A0A] text-white"
-                      : li.platform.toLowerCase() === "codewars"
-                      ? "bg-[#AD2C27] text-white"
-                      : li.platform.toLowerCase() === "codepen"
-                      ? "bg-[#000000] text-white"
-                      : li.platform.toLowerCase() === "freecodecamp"
-                      ? "bg-[#006400] text-white"
-                      : li.platform.toLowerCase() === "hashnode"
-                      ? "bg-[#2962FF] text-white"
-                      : li.platform.toLowerCase() === "stack overflow"
-                      ? "bg-[#F48024] text-white"
-                      : "bg-gray-200 text-black"
-                  )}
-                >
-                  <div className="flex gap-2 items-center">
-                    {li.platform.toLowerCase() === "github" ? (
-                      <FaGithub />
-                    ) : li.platform.toLowerCase() === "youtube" ? (
-                      <FaYoutube />
-                    ) : li.platform.toLowerCase() === "twitter" ? (
-                      <FaXTwitter />
-                    ) : li.platform.toLowerCase() === "linkedin" ? (
-                      <FaLinkedin />
-                    ) : li.platform.toLowerCase() === "dribbble" ? (
-                      <FaDribbble />
-                    ) : li.platform.toLowerCase() === "facebook" ? (
-                      <FaFacebook />
-                    ) : li.platform.toLowerCase() === "instagram" ? (
-                      <FaInstagramSquare />
-                    ) : li.platform.toLowerCase() === "gitlab" ? (
-                      <FaGitlab />
-                    ) : li.platform.toLowerCase() === "frontend mentor" ? (
-                      <SiFrontendmentor />
-                    ) : li.platform.toLowerCase() === "twitch" ? (
-                      <FaTwitch />
-                    ) : li.platform.toLowerCase() === "dev.to" ? (
-                      <BiLogoDevTo />
-                    ) : li.platform.toLowerCase() === "codewars" ? (
-                      <SiCodewars />
-                    ) : li.platform.toLowerCase() === "codepen" ? (
-                      <FaCodepen />
-                    ) : li.platform.toLowerCase() === "freecodecamp" ? (
-                      <FaFreeCodeCamp />
-                    ) : li.platform.toLowerCase() === "hashnode" ? (
-                      <FaHashnode />
-                    ) : li.platform.toLowerCase() === "stack overflow" ? (
-                      <FaStackOverflow />
-                    ) : (
-                      <LinkIcon />
+            {links.length > 0 ? (
+              <div className="flex items-center justify-center w-full flex-col gap-5">
+                {links.map((li) => (
+                  <Link
+                    href={li.link}
+                    key={li.id}
+                    className={cn(
+                      "flex w-full h-[44px] rounded-md px-2 items-center justify-between",
+                      li.platform.toLowerCase() === "github"
+                        ? "bg-black text-white"
+                        : li.platform.toLowerCase() === "youtube"
+                        ? "bg-[#EE3939] text-white"
+                        : li.platform.toLowerCase() === "twitter"
+                        ? "bg-[#1DA1F2] text-white"
+                        : li.platform.toLowerCase() === "linkedin"
+                        ? "bg-[#2D68FF] text-white"
+                        : li.platform.toLowerCase() === "dribbble"
+                        ? "bg-[#ea4c89] text-white"
+                        : li.platform.toLowerCase() === "facebook"
+                        ? "bg-[#2442AC] text-white"
+                        : li.platform.toLowerCase() === "instagram"
+                        ? "bg-gradient-to-r from-pink-500 to-yellow-500 text-white"
+                        : li.platform.toLowerCase() === "gitlab"
+                        ? "bg-[#FC6D26] text-white"
+                        : li.platform.toLowerCase() === "frontend mentor"
+                        ? "bg-[#333333] text-white"
+                        : li.platform.toLowerCase() === "twitch"
+                        ? "bg-[#9146FF] text-white"
+                        : li.platform.toLowerCase() === "dev.to"
+                        ? "bg-[#0A0A0A] text-white"
+                        : li.platform.toLowerCase() === "codewars"
+                        ? "bg-[#AD2C27] text-white"
+                        : li.platform.toLowerCase() === "codepen"
+                        ? "bg-[#000000] text-white"
+                        : li.platform.toLowerCase() === "freecodecamp"
+                        ? "bg-[#006400] text-white"
+                        : li.platform.toLowerCase() === "hashnode"
+                        ? "bg-[#2962FF] text-white"
+                        : li.platform.toLowerCase() === "stack overflow"
+                        ? "bg-[#F48024] text-white"
+                        : "bg-gray-200 text-black"
                     )}
-                    <span>{li.platform}</span>
-                  </div>
-                  <Button asChild variant="link" className="text-white text-sm">
-                    <Link href={li.link} target="_blank">
-                      <ArrowRight size={14} />
-                    </Link>
-                  </Button>
-                </Link>
-              ))}
-            </div>
+                  >
+                    <div className="flex gap-2 items-center">
+                      {li.platform.toLowerCase() === "github" ? (
+                        <FaGithub />
+                      ) : li.platform.toLowerCase() === "youtube" ? (
+                        <FaYoutube />
+                      ) : li.platform.toLowerCase() === "twitter" ? (
+                        <FaXTwitter />
+                      ) : li.platform.toLowerCase() === "linkedin" ? (
+                        <FaLinkedin />
+                      ) : li.platform.toLowerCase() === "dribbble" ? (
+                        <FaDribbble />
+                      ) : li.platform.toLowerCase() === "facebook" ? (
+                        <FaFacebook />
+                      ) : li.platform.toLowerCase() === "instagram" ? (
+                        <FaInstagramSquare />
+                      ) : li.platform.toLowerCase() === "gitlab" ? (
+                        <FaGitlab />
+                      ) : li.platform.toLowerCase() === "frontend mentor" ? (
+                        <SiFrontendmentor />
+                      ) : li.platform.toLowerCase() === "twitch" ? (
+                        <FaTwitch />
+                      ) : li.platform.toLowerCase() === "dev.to" ? (
+                        <BiLogoDevTo />
+                      ) : li.platform.toLowerCase() === "codewars" ? (
+                        <SiCodewars />
+                      ) : li.platform.toLowerCase() === "codepen" ? (
+                        <FaCodepen />
+                      ) : li.platform.toLowerCase() === "freecodecamp" ? (
+                        <FaFreeCodeCamp />
+                      ) : li.platform.toLowerCase() === "hashnode" ? (
+                        <FaHashnode />
+                      ) : li.platform.toLowerCase() === "stack overflow" ? (
+                        <FaStackOverflow />
+                      ) : (
+                        <LinkIcon />
+                      )}
+                      <span>{li.platform}</span>
+                    </div>
+                    <Button
+                      asChild
+                      variant="link"
+                      className="text-white text-sm"
+                    >
+                      <Link href={li.link} target="_blank">
+                        <ArrowRight size={14} />
+                      </Link>
+                    </Button>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p>this users profile is blank</p>
+            )}
           </div>
         </div>
       </div>
@@ -219,4 +226,4 @@ const PhoneScreen = () => {
   );
 };
 
-export { ProfileHeader };
+export { ProfileHeader, PhoneScreen };
