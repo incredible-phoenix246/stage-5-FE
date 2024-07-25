@@ -44,25 +44,45 @@ const ProfileHeader = () => {
   return (
     <header className="flex flex-col self-stretch px-6 pt-6 pb-20 w-full text-base font-semibold md:bg-violet-600 rounded-none max-md:px-5 max-md:max-w-full">
       <nav className="pl-[24px] p-[16px] w-full flex items-center justify-between bg-white md:rounded-xl">
-        {user && (
+        {user ? (
           <Button asChild variant="secondary">
             <Link href="/dashboard">Back to Editor</Link>
           </Button>
+        ) : (
+          <Button
+            onClick={async () => {
+              await navigator.clipboard.writeText(url).then(() => {
+                toast({
+                  title: "Link Copied!",
+                  description:
+                    "The link has been successfully copied to your clipboard.",
+                });
+              });
+            }}
+          >
+            Share Link
+          </Button>
         )}
 
-        <Button
-          onClick={async () => {
-            await navigator.clipboard.writeText(url).then(() => {
-              toast({
-                title: "Link Copied!",
-                description:
-                  "The link has been successfully copied to your clipboard.",
+        {user ? (
+          <Button
+            onClick={async () => {
+              await navigator.clipboard.writeText(url).then(() => {
+                toast({
+                  title: "Link Copied!",
+                  description:
+                    "The link has been successfully copied to your clipboard.",
+                });
               });
-            });
-          }}
-        >
-          Share Link
-        </Button>
+            }}
+          >
+            Share Link
+          </Button>
+        ) : (
+          <Button asChild>
+            <Link href="/auth/login">Get started</Link>
+          </Button>
+        )}
       </nav>
     </header>
   );
