@@ -15,8 +15,10 @@ import { OtpModal } from "../modals";
 import { CreateNewUser, Login } from "@/app/action/auth";
 import { useAppCtx } from "@/app/appcontext";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Login_Form = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -36,6 +38,7 @@ const Login_Form = () => {
             password,
             redirect: false,
           });
+          router.push("/dashboard");
         }
         toast({
           title: data.success ? "Login successfully!" : "An error occured",

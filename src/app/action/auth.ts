@@ -5,6 +5,7 @@ import prisma from "utils/prisma";
 import * as z from "zod";
 import { generateNumericOTP } from "@/utils";
 import axios from "axios";
+import { auth, unstable_update } from "@/auth";
 
 const CreateNewUser = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(values);
@@ -47,7 +48,8 @@ const CreateNewUser = async (values: z.infer<typeof RegisterSchema>) => {
     });
 
     const sendmail = await axios.post(
-      "https://mail-service-1omd.onrender.com/api/devlink/sendotp",
+      process.env.OTP_LINK ??
+        "https://mail-service-1omd.onrender.com/api/devlink/sendotp",
       {
         name,
         email,
@@ -232,4 +234,80 @@ const GOOGLE_SIGN_IN = async (profile: any) => {
     };
   }
 };
-export { CreateNewUser, Login, getuserbyemaail, verifyOtp, GOOGLE_SIGN_IN };
+
+const UpdateUserDataSchema = z.object({
+  name: z.string().optional(),
+  email: z.string().email().optional(),
+  image: z.string().optional(),
+});
+
+const updateUser = async (updateData: z.infer<typeof UpdateUserDataSchema>) => {
+  const validatedFields = UpdateUserDataSchema.safeParse(updateData);
+
+  if (!validatedFields.success) {
+    return {
+      error: "Invalid data. Please check the fields.",
+      success: false,
+    };
+  }
+
+  const session = await auth();
+
+  if (!session?.user)
+    return { error: "User not authenticated", success: false };
+
+  const { name, email, image } = validatedFields.data;
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+    });
+
+    if (!user) {
+      return {
+        error: "User not found.",
+        success: false,
+      };
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: session.user.id,
+      },
+      data: {
+        ...(name && { name }),
+        ...(email && { email }),
+        ...(image && { image }),
+      },
+    });
+
+    await unstable_update({
+      ...(user as any),
+      name: updatedUser.name,
+      email: updatedUser.email,
+      image: updatedUser.image,
+    });
+
+    return {
+      success: true,
+      message: "User updated successfully.",
+      user: updatedUser,
+    };
+  } catch (e: any) {
+    return {
+      error: e.message || "An unexpected error occurred.",
+      success: false,
+    };
+  }
+};
+
+export {
+  CreateNewUser,
+  Login,
+  getuserbyemaail,
+  verifyOtp,
+  GOOGLE_SIGN_IN,
+  updateUser,
+};
