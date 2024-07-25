@@ -194,15 +194,28 @@ const PhoneScreen = () => {
 
 const ProfilePage = () => {
   const { data: userSession } = useSession();
-  const [userData, setUserData] = useState<User>({} as User);
+  const [userData, setUserData] = useState<{
+    name: string;
+    email: string;
+    image: string;
+  }>({
+    name: "",
+    email: "",
+    image: "",
+  });
   const [image, setImage] = useState<File | Blob | null>(null);
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     if (userSession) {
-      // @ts-ignore
-      setUserData(userSession as User);
+      setUserData({
+        // @ts-ignore
+        name: userSession.user.name,
+        email: userSession.user.email,
+        // @ts-ignore
+        image: userSession.user.image,
+      });
     }
   }, [userSession]);
 
@@ -305,8 +318,6 @@ const ProfilePage = () => {
           });
         }
       } else {
-        console.log("Saving user data without new image:", userData);
-
         startTransition(() => {
           updateUser({
             // @ts-ignore
@@ -344,13 +355,14 @@ const ProfilePage = () => {
         </span>
         <Label
           htmlFor="profileImage"
-          className="flex flex-col justify-center items-center px-10 mx-auto text-base font-semibold leading-6 text-violet-600 bg-violet-100 rounded-xl h-[193px] w-[193px] max-md:px-5 max-md:mt-6"
+          className="flex flex-col justify-center cursor-pointer items-center px-10 mx-auto text-base font-semibold leading-6 text-violet-600 bg-violet-100 rounded-xl h-[193px] w-[193px] max-md:px-5 max-md:mt-6"
         >
           <CiImageOn size={40} />
           <span className="mt-2">+ Upload Image</span>
           <Input
             className="sr-only"
             id="profileImage"
+            type="file"
             accept="image/jpeg,image/png,image/svg+xml"
             onChange={handleImageChange}
           />
@@ -359,23 +371,25 @@ const ProfilePage = () => {
           Image must be below 1024x1024px. Use PNG or JPG format.
         </span>
       </div>
-      <div className="bg-[#FAFAFA] md:mt-[40px] w-full flex flex-col h-[223px] md:flex-row p-[12px] md:p-[20px] items-center justify-between mt-5">
+      <div className="bg-[#FAFAFA] w-full flex flex-col gap-3 p-[12px] md:p-[20px] items-center justify-between mt-5 ">
         <div className="flex items-center flex-col md:flex-row justify-between w-full ">
           <Label className="">Name</Label>
           <Input
             placeholder="e.g. John"
             name="name"
-            value={userData.name || ""}
+            value={userData.name}
             onChange={handleChange}
+            className="md:w-[60%]"
           />
         </div>
         <div className="flex items-center flex-col md:flex-row justify-between w-full ">
           <Label className="">email</Label>
           <Input
             name="email"
-            value={userData.email || ""}
+            value={userData.email}
             onChange={handleChange}
             placeholder="e.g. email@example.com"
+            className="md:w-[60%]"
           />
         </div>
       </div>
