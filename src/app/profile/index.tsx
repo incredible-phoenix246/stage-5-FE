@@ -97,7 +97,7 @@ const PhoneScreen = () => {
     });
   }, [sesion, user_id]);
   return (
-    <div className="bg-white md:w-[560px] md:h-[830px] flex items-center justify-center">
+    <div className="bg-white md:w-[560px] md:h-[830px] flex items-center justify-center mx-auto">
       <div className="phone">
         <div className="phone-screen">
           <div className="top">
