@@ -7,8 +7,8 @@ const page = () => {
     <>
       <Suspense>
         <ProfileHeader />
+        <PhoneScreen />
       </Suspense>
-      <PhoneScreen />
     </>
   );
 };
