@@ -110,4 +110,44 @@ const CreateOrUpdateLink = async (links: LinkProps[]) => {
   }
 };
 
-export { getAllLinks, CreateLink, CreateOrUpdateLink };
+const getLinks = async (id: string) => {
+  try {
+    const links = await prisma.links.findMany({
+      where: {
+        userId: id,
+      },
+    });
+
+    return {
+      success: true,
+      links,
+    };
+  } catch (e: any) {
+    return {
+      error: e.message,
+      success: false,
+    };
+  }
+};
+
+const getUserbyId = async (id: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return {
+      success: true,
+      user,
+    };
+  } catch (e: any) {
+    return {
+      error: e.message,
+      success: false,
+    };
+  }
+};
+
+export { getAllLinks, CreateLink, CreateOrUpdateLink, getLinks, getUserbyId };

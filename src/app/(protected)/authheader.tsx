@@ -7,9 +7,11 @@ import { Link as LinkIcon, CircleUser, Eye } from "lucide-react";
 import { useAppCtx } from "../appcontext";
 import { cn } from "@/utils";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const AuthenticatedHeader = () => {
   const { setTabs, tabs } = useAppCtx();
+  const { data: user } = useSession();
   return (
     <nav className="pl-[24px] p-[16px] w-full flex items-center justify-between bg-white md:rounded-xl">
       <Image
@@ -52,7 +54,7 @@ const AuthenticatedHeader = () => {
         </Button>
       </div>
       <Button variant="secondary" className="flex items-center gap-2" asChild>
-        <Link href="/preview">
+        <Link href={`/profile?id=${user?.user.id}`}>
           <Eye className="md:hidden" />
           <span className="hidden md:inline">Preview</span>
         </Link>
